@@ -1,0 +1,16 @@
+{
+    "max_disappear": 20,
+    "max_distance": 170,
+    "track_object": 4,
+    "confidence": 0.4,
+    "frame_width": 1000,
+    "speed_estimation_zone": {"A": 12, "B": 16, "C": 20, "D": 24},
+    "distance": 100,
+    "speed_limit": 0,
+    "display": true,
+    "output_path": "output",
+    "csv_name": "log.csv",
+    "use_dropbox": false,
+    "model_path": "mobilenet.caffemodel",
+    "prototxt_path": "deploy.prototxt"
+}

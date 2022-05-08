@@ -1,0 +1,10 @@
+__pycache__
+.DS_Store
+.vscode
+*.mp4
+*.csv
+datasets/
+__pycache__
+*.pickle
+venv/
+*.xml
