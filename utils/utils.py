@@ -1,4 +1,6 @@
 import logging
+import serial.tools.list_ports
+from typing import List
 
 def get_logger(environment: str = "DEV", name: str = __name__) -> logging.getLogger:
     logger = logging.getLogger(name)
@@ -13,3 +15,10 @@ def get_logger(environment: str = "DEV", name: str = __name__) -> logging.getLog
     logger_handler.setFormatter(formatter)
     logger.addHandler(logger_handler)
     return logger
+
+
+def get_serial_ports() -> List[serial.tools.list_ports.comports]:
+    ports = list(serial.tools.list_ports.comports())
+    if len(ports) < 1:
+        raise Exception("No serial ports found")
+    return ports
