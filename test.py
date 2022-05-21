@@ -21,4 +21,5 @@ for port, desc, hwid in sorted(get_comm_ports):
         serial_port = port
         break
 
+logger.info(f"Fingerprint Ports {serial_port}")
 fingerprint = FingerprintSensor(serial_port)
