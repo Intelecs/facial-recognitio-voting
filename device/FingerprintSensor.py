@@ -18,8 +18,8 @@ class FingerprintSensor:
             if (self.fingerprint_sensor.verifyPassword() == False):
                 raise ValueError('The given fingerprint sensor password is wrong!')
         except Exception as e:
-            logger.erorr('The fingerprint sensor could not be initialized!')
-            logger.erorr(f'Exception message: {e}')
+            logger.info('The fingerprint sensor could not be initialized!')
+            logger.info(f'Exception message: {e}')
             exit(1)
     
 
