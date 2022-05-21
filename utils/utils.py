@@ -22,3 +22,6 @@ def get_serial_ports() -> List[serial.tools.list_ports.comports]:
     if len(ports) < 1:
         raise Exception("No serial ports found")
     return ports
+
+# for port, desc, hwid in sorted(ports):
+#         print("{}: {} [{}]".format(port, desc, hwid))

@@ -11,7 +11,13 @@ class TestFingerprint(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         get_comm_ports = get_serial_ports()
-        # cls.fingerprint.setup_sensor()
+        serial_port = None
+        for port, desc, hwid in sorted(get_comm_ports):
+            if "USB-Serial" in desc:
+                serial_port = port
+                break
+        if serial_port is not None:
+            cls.fingerprint = FingerprintSensor(serial_port)
 
     @classmethod
     def tearDownClass(cls):
