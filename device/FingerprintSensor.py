@@ -10,7 +10,6 @@ logger = get_logger(name=__name__)
 class FingerprintSensor:
     com_port: str = "COM3"
     fingerprint_sensor: PyFingerprint = None
-    
 
 
     def setup_sensor(self):

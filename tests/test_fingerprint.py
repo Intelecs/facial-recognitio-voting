@@ -6,7 +6,7 @@ logger =get_logger(name=__name__)
 
 class TestFingerprint(unittest.TestCase):
 
-    # fingerprint = FingerprintSensor()
+    fingerprint = FingerprintSensor()
 
     @classmethod
     def setUpClass(cls):
