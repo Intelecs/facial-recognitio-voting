@@ -19,7 +19,7 @@ class FingerprintSensor:
                 raise ValueError('The given fingerprint sensor password is wrong!')
         except Exception as e:
             logger.info('The fingerprint sensor could not be initialized!')
-            logger('Exception message: ' + str(e))
+            logger.info(f'Exception message: {e}')
             exit(1)
     
 
