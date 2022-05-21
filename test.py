@@ -17,7 +17,7 @@ serial_port = None
 logger.info(f"Fingerprint Ports {get_comm_ports}")
 
 for port, desc, hwid in sorted(get_comm_ports):
-    print(port, desc, hwid)
+    print("Port: {}, Description: {}, Hardware ID: {}".format(port, desc, hwid))
     if "USB-Serial" in desc:
         serial_port = port
         break
