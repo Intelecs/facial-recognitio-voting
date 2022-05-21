@@ -1,7 +1,8 @@
 import unittest
 
+
 import os,sys
-sys.path.insert(0, os.path.dirname(os.getcwd()))
+sys.path.insert(1, os.path.dirname(os.getcwd()))
 
 from device.FingerprintSensor import FingerprintSensor
 from utils.utils import get_logger, get_serial_ports
