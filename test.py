@@ -23,3 +23,7 @@ for port, desc, hwid in sorted(get_comm_ports):
 
 logger.info(f"Fingerprint Ports {serial_port}")
 fingerprint = FingerprintSensor(serial_port)
+
+if __name__ == "__main__":
+    # TestFingerprint.test_get_serial_ports()
+    fingerprint.setup_sensor()
