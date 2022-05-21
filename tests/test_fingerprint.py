@@ -6,11 +6,12 @@ logger =get_logger(name=__name__)
 
 class TestFingerprint(unittest.TestCase):
 
-    fingerprint = FingerprintSensor()
+    # fingerprint = FingerprintSensor()
 
     @classmethod
     def setUpClass(cls):
-        cls.fingerprint.setup_sensor()
+        get_comm_ports = get_serial_ports()
+        # cls.fingerprint.setup_sensor()
 
     @classmethod
     def tearDownClass(cls):
