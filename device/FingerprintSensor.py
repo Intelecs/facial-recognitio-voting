@@ -17,13 +17,12 @@ class FingerprintSensor:
         try:
             
             self.fingerprint_sensor =  PyFingerprint('/dev/ttyUSB0', self.baudrate, 0xFFFFFFFF, 0x00000000)
-            time.sleep(5)
             if (self.fingerprint_sensor.verifyPassword() == False):
                 raise ValueError('The given fingerprint sensor password is wrong!')
         except Exception as e:
             logger.info('The fingerprint sensor could not be initialized!')
             logger.info(f'Exception message: {e}')
-            exit(1)
+            # exit(1)
     
 
     def sensor_details(self) -> str:
