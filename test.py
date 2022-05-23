@@ -13,7 +13,7 @@ import adafruit_fingerprint
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
 import serial
-uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=1)
+uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=10)
 
 # If using with Linux/Raspberry Pi and hardware UART:
 # import serial
