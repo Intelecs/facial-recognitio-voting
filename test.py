@@ -14,14 +14,13 @@ import adafruit_fingerprint
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
 import serial
 uart = None
-for i in range(1, 13):
+for i in range(1, 20):
     try:
         print("tryinning to connect to the fingerprint sensor", 9600*i)
         uart = serial.Serial("/dev/ttyUSB0", baudrate=9600*i, timeout=1)
         finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
         print( finger.read_templates())
     except Exception as e:
-        print(e, i*9600)
         continue
 
 # If using with Linux/Raspberry Pi and hardware UART:
