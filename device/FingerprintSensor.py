@@ -14,7 +14,7 @@ class FingerprintSensor:
 
     def setup_sensor(self):
         try:
-            self.fingerprint_sensor = PyFingerprint("dev/ttyAMA0", 115200, 0xFFFFFFFF, 0x00000000)
+            self.fingerprint_sensor = PyFingerprint("/dev/ttyAMA0", 115200, 0xFFFFFFFF, 0x00000000)
             if (self.fingerprint_sensor.verifyPassword() == False):
                 raise ValueError('The given fingerprint sensor password is wrong!')
         except Exception as e:
