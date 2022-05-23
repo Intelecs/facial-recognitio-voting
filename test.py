@@ -28,3 +28,5 @@ fingerprint = FingerprintSensor(serial_port)
 if __name__ == "__main__":
     # TestFingerprint.test_get_serial_ports()
     fingerprint.setup_sensor()
+
+    logger.info(f"Fingerprint sensor {fingerprint.getSystemParameters()} found")
