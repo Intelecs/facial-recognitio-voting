@@ -14,8 +14,10 @@ for i in range(1, 20):
         fingerprint = FingerprintSensor(
             baudrate=9600*i,
         )
+        logger.info( baudrate=9600*i)
         fingerprint.setup_sensor()
-        logger.info( fingerprint.sensor_details(), baudrate=9600*i)
+        logger.info( fingerprint.sensor_details())
+        
     except Exception as e:
         logger.info(e)
         continue
