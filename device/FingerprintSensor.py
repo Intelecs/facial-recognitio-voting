@@ -10,12 +10,12 @@ logger = get_logger(name=__name__)
 class FingerprintSensor:
     com_port: str = "COM3"
     fingerprint_sensor: PyFingerprint = None
-
+    baudrate = 57600
 
     def setup_sensor(self):
         try:
             
-            self.fingerprint_sensor =  PyFingerprint('/dev/ttyUSB0', 57600, 0xFFFFFFFF, 0x00000000)
+            self.fingerprint_sensor =  PyFingerprint('/dev/ttyUSB0', self.baudrate, 0xFFFFFFFF, 0x00000000)
             time.sleep(5)
             if (self.fingerprint_sensor.verifyPassword() == False):
                 raise ValueError('The given fingerprint sensor password is wrong!')
