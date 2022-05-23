@@ -26,7 +26,7 @@ class FingerprintSensor:
     
 
     def sensor_details(self) -> str:
-        return f"{str(self.fingerprint_sensor.getTemplateCount())}/{str(self.fingerprint_sensor.getStorageCapacity())}"
+        return f"{str(self.fingerprint_sensor.getTemplateCount())} - {str(self.fingerprint_sensor.getStorageCapacity())}"
     
     def enroll_fingerprint(self):
         try:
