@@ -8,9 +8,10 @@ import tempfile
 logger = get_logger(name=__name__)
 @dataclass
 class FingerprintSensor:
+    baudrate: int
     com_port: str = "COM3"
     fingerprint_sensor: PyFingerprint = None
-    baudrate = 57600
+    
 
     def setup_sensor(self):
         try:
