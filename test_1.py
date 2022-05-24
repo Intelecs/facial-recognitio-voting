@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 logger.info("Cleaned message: {}".format(data.strip()))
                 if "Ready" in data:
                     logger.info("Sending Data")
-                    serial_port.write(str(random.randint(0,127)).encode())
+                    serial_port.write(str(random.randint(1,127)).encode())
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
