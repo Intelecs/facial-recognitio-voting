@@ -10,6 +10,7 @@ logger =get_logger(name=__name__)
 
 ports = get_serial_ports()
 port = None
+serial_port = None
 
 if __name__ == "__main__":
     for port, desc, hwid in sorted(ports):
@@ -38,8 +39,9 @@ if __name__ == "__main__":
                     finger_id = random.randint(1, 127) 
                     logger.info(f"Sending Data to Arduino: {finger_id}")
                     serial_port.write(bytes(finger_id))
+                    serial_port.flushInput()
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
         # serial_port.close()
-        serial_port.flushInput()
+        
