@@ -28,4 +28,4 @@ if __name__ == "__main__":
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
-        serial_port.close()
+        # serial_port.close()
