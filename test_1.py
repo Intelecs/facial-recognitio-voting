@@ -14,6 +14,7 @@ if __name__ == "__main__":
         logger.info("{}: {} [{}]".format(port, desc, hwid))
     serial_port = serial.Serial(port, baudrate=9600, timeout=1)
     with serial_port:
-        logger.info(f"Serial {serial_port.readline()}")
+        while 1:
+            logger.info(f"Serial {serial_port.readline()}")
 
 
