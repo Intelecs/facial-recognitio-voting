@@ -27,7 +27,7 @@ if __name__ == "__main__":
                 logger.info("Cleaned message: {}".format(data.strip()))
                 if "Ready" in data:
                     logger.info("Sending Data")
-                    serial_port.write("5")
+                    serial_port.write(b"5")
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
