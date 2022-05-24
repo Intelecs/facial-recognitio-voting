@@ -29,10 +29,17 @@ if __name__ == "__main__":
         # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
             
+            finger_id = '222'
+            serial_port.write(bytes(finger_id))
+            
+            serial_port.flush()
+            time.sleep(0.1)
+
             data = serial_port.readline()
             # data = serial_port.read(100)
             data = data.decode("utf-8")
             logger.info("data: {}".format(data))
+
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
                 finger_id = '222'
@@ -43,7 +50,7 @@ if __name__ == "__main__":
                     
                     serial_port.write(bytes(finger_id))
                     # serial_port.write('{}'.format(finger_id))
-                    serial_port.flush()
+                    
                     time.sleep(0.5)
                     
                     serial_port.reset_input_buffer()
