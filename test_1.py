@@ -16,11 +16,12 @@ if __name__ == "__main__":
     serial_port.reset_input_buffer()
 
     while True:
+        serial_port.reset_input_buffer()
         try:
             data = serial_port.readline()
             logger.info("data: {}".format(data))
             if data:
-                logger.info(data)
+                logger.info(str(data))
         except Exception as e:
             logger.error(e)
         time.sleep(0.1)
