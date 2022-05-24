@@ -20,11 +20,15 @@ if __name__ == "__main__":
             serial_port.flushOutput()
             message = serial_port.readline()
 
-            message = str(message, encoding="utf-8")
+            try:
+                message = message.decode("utf-8")
+                logger.info(message)
+            except Exception as e:
+                logger.error(e)
             message = message.strip()
             if message != "":
                 logger.info(f"Serial {message}")
-                time.sleep(.001)
+                time.sleep(1)
             
 
 
