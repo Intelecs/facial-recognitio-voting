@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
             data = serial_port.readline()
             data = str(data)
-            serial_port.flush()
+            # serial_port.flush()
 
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
