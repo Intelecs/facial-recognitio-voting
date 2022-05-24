@@ -38,9 +38,11 @@ if __name__ == "__main__":
                 if "Re" in data:
                     finger_id = random.randint(1, 127) 
                     logger.info(f"Sending Data to Arduino: {finger_id}")
+                    time.sleep(0.5)
                     serial_port.write(bytes(finger_id))
-                    serial_port.flushInput()
-                    serial_port.flushOutput()
+                    
+                    serial_port.reset_input_buffer()
+                    serial_port.reset_output_buffer()
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
