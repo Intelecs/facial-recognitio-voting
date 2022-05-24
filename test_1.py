@@ -22,13 +22,15 @@ if __name__ == "__main__":
 
             try:
                 message = message.decode("utf-8")
-                logger.info(message)
+                if len(message) > 0:
+                    logger.info(message)
             except Exception as e:
                 logger.error(e)
             message = message.strip()
             if message != "":
-                logger.info(f"Serial {message}")
-                time.sleep(1)
+                if len(message) > 0:
+                    logger.info(f"Serial {message}")
+            time.sleep(1)
             
 
 
