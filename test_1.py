@@ -20,6 +20,7 @@ if __name__ == "__main__":
         # serial_port.reset_input_buffer()
         # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
+            
             data = serial_port.readline()
             # data = serial_port.read(100)
             data = data.decode("utf-8")
@@ -33,3 +34,4 @@ if __name__ == "__main__":
             logger.error(e)
         # time.sleep(0.1)
         # serial_port.close()
+        serial_port.flushInput()
