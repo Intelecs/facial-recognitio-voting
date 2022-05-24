@@ -18,7 +18,7 @@ if __name__ == "__main__":
         if "USB-Serial" in desc:
             _port = port
             break
-    if port is  None:
+    if _port is not None:
     # logger.info("No USB-Serial port found")
         
         serial_port = serial.Serial(_port, baudrate=9600)
