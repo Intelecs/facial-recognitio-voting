@@ -25,14 +25,13 @@ if __name__ == "__main__":
         serial_port.reset_input_buffer()
 
     while True:
-        # serial_port.reset_input_buffer()
+        serial_port.reset_input_buffer()
         # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
 
             data = serial_port.readline()
-            # data = serial_port.read(100)
-            data = data.decode("utf-8")
-            logger.info("data: {}".format(data))
+            data = str(data)
+            serial_port.flush()
 
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
