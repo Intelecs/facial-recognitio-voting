@@ -30,7 +30,7 @@ if __name__ == "__main__":
         try:
 
             data = serial_port.readline()
-            data = str(data)
+            data = data.decode()
             # serial_port.flush()
 
             if data:
