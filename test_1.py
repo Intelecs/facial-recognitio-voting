@@ -30,7 +30,7 @@ if __name__ == "__main__":
         try:
             
             finger_id = '222'
-            serial_port.write(bytes(finger_id))
+            serial_port.write(b'223')
             
             serial_port.flush()
             time.sleep(0.1)
