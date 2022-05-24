@@ -26,4 +26,4 @@ if __name__ == "__main__":
                 logger.info("Cleaned message: {}".format(data.strip()))
         except Exception as e:
             logger.error(e)
-        time.sleep(0.1)
+        # time.sleep(0.1)
