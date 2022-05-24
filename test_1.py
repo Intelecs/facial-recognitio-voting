@@ -28,12 +28,6 @@ if __name__ == "__main__":
         # serial_port.reset_input_buffer()
         # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
-            
-            finger_id = '222'
-            serial_port.write(b'223')
-            
-            serial_port.flush()
-            time.sleep(0.1)
 
             data = serial_port.readline()
             # data = serial_port.read(100)
@@ -42,13 +36,14 @@ if __name__ == "__main__":
 
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
-                finger_id = '222'
+    
                 serial_port.write(bytes(finger_id))
                 if "Re" in data:
-                    finger_id = random.randint(1, 127) 
+                    finger_id = b'' + str(random.randint(1, 127) )
                     logger.info(f"Sending Data to Arduino: {finger_id}")
                     
                     serial_port.write(bytes(finger_id))
+                    serial_port.flush()
                     # serial_port.write('{}'.format(finger_id))
                     
                     time.sleep(0.5)
