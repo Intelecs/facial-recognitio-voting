@@ -9,19 +9,19 @@ from utils.utils import get_logger, get_serial_ports
 logger =get_logger(name=__name__)
 
 ports = get_serial_ports()
-port = None
+_port = None
 serial_port = None
 
 if __name__ == "__main__":
     for port, desc, hwid in sorted(ports):
         logger.info("{}: {} [{}]".format(port, desc, hwid))
         if "USB-Serial" in desc:
-            port = port
+            _port = port
             break
     if port is  None:
     # logger.info("No USB-Serial port found")
         
-        serial_port = serial.Serial(port, baudrate=9600)
+        serial_port = serial.Serial(_port, baudrate=9600)
         serial_port.reset_input_buffer()
 
     while True:
