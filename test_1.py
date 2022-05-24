@@ -12,7 +12,7 @@ ports = get_serial_ports()
 if __name__ == "__main__":
     for port, desc, hwid in sorted(ports):
         logger.info("{}: {} [{}]".format(port, desc, hwid))
-    serial_port = serial.Serial(port, baudrate=57600, timeout=0)
+    serial_port = serial.Serial(port, baudrate=9600, timeout=0)
     with serial_port:
         while 1:
             time.sleep(.001)
