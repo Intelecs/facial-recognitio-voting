@@ -40,7 +40,7 @@ if __name__ == "__main__":
                     finger_id = str(random.randint(1, 127) )
                     logger.info(f"Sending Data to Arduino: {finger_id}")
                     
-                    serial_port.write(bytes(finger_id))
+                    serial_port.write(bytes(finger_id, "utf-8"))
                     serial_port.flush()
                     # serial_port.write('{}'.format(finger_id))
                     
