@@ -19,7 +19,8 @@ if __name__ == "__main__":
             serial_port.flushInput()
             serial_port.flushOutput()
             message = serial_port.readline()
-            message = str(message)
+
+            message = str(message, encoding="utf-8")
             message = message.strip()
             if message != "":
                 logger.info(f"Serial {message}")
