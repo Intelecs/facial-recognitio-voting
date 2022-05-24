@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
-                if "Re" in data:
+                if "Ready" in data:
                     finger_id = str(random.randint(1, 127) )
                     logger.info(f"Sending Data to Arduino: {finger_id}")
                     
