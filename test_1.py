@@ -17,8 +17,8 @@ if __name__ == "__main__":
         if "USB-Serial" in desc:
             port = port
             break
-    if port is not None:
-        logger.info("No USB-Serial port found")
+    if port is  None:
+    # logger.info("No USB-Serial port found")
         
         serial_port = serial.Serial(port, baudrate=9600)
         serial_port.reset_input_buffer()
@@ -35,8 +35,9 @@ if __name__ == "__main__":
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
                 if "Re" in data:
-                    logger.info("Sending Data")
-                    serial_port.write(str(random.randint(1,127)).encode())
+                    finger_id = random.randint(1, 127) 
+                    logger.info(f"Sending Data to Arduino: {finger_id}")
+                    serial_port.write(bytes(finger_id))
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
