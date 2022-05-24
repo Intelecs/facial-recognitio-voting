@@ -13,24 +13,14 @@ if __name__ == "__main__":
     for port, desc, hwid in sorted(ports):
         logger.info("{}: {} [{}]".format(port, desc, hwid))
     serial_port = serial.Serial(port, baudrate=9600, timeout=0, parity=serial.PARITY_EVEN, rtscts=1)
-    with serial_port:
-        while 1:
-            # time.sleep(.001)
-            serial_port.flushInput()
-            serial_port.flushOutput()
-            message = serial_port.readline()
+    serial_port.reset_input_buffer()
 
-            try:
-                message = message.decode("utf-8")
-                if len(message) > 0:
-                    logger.info(message)
-            except Exception as e:
-                logger.error(e)
-            message = message.strip()
-            if message != "":
-                if len(message) > 0:
-                    logger.info(f"Serial {message}")
-            time.sleep(1)
-            
-
-
+    while True:
+        try:
+            data = serial_port.readline()
+            logger.info("data: {}".format(data))
+            if data:
+                logger.info(data)
+        except Exception as e:
+            logger.error(e)
+        time.sleep(0.1)
