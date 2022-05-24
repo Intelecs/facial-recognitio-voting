@@ -16,10 +16,12 @@ if __name__ == "__main__":
     with serial_port:
         while 1:
             # time.sleep(.001)
-            message = serial_port.read(100)
+            serial_port.flushInput()
+            serial_port.flushOutput()
+            message = serial_port.readline()
             message = str(message)
             message = message.strip()
-            if message == "":
+            if message != "":
                 logger.info(f"Serial {message}")
                 time.sleep(.001)
             
