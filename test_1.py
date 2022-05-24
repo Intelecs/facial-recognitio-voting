@@ -40,6 +40,7 @@ if __name__ == "__main__":
                     logger.info(f"Sending Data to Arduino: {finger_id}")
                     serial_port.write(bytes(finger_id))
                     serial_port.flushInput()
+                    serial_port.flushOutput()
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
