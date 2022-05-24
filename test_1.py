@@ -19,6 +19,9 @@ if __name__ == "__main__":
             message = serial_port.readline()
             message = message.decode()
             message = message.strip()
-            logger.info(f"Serial {message}")
+            if message == "":
+                logger.info(f"Serial {message}")
+                time.sleep(.001)
+            
 
 
