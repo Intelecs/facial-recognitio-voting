@@ -13,7 +13,7 @@ if __name__ == "__main__":
     for port, desc, hwid in sorted(ports):
         logger.info("{}: {} [{}]".format(port, desc, hwid))
     serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
-    # serial_port.reset_input_buffer()
+    serial_port.reset_input_buffer()
 
     while True:
         # serial_port.reset_input_buffer()
