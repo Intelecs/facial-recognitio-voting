@@ -20,9 +20,10 @@ if __name__ == "__main__":
         try:
             # data = serial_port.readline()
             data = serial_port.read(100)
-            logger.info("data: {}".format(data.decode("utf-8")))
+            data = data.decode("utf-8")
+            logger.info("data: {}".format(data))
             if data:
-                logger.info(str(data))
+                logger.info("Cleaned message: {}".format(data.strip()))
         except Exception as e:
             logger.error(e)
         time.sleep(0.1)
