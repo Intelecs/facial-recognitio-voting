@@ -18,8 +18,8 @@ if __name__ == "__main__":
     while True:
         # serial_port.reset_input_buffer()
         try:
-            # data = serial_port.readline()
-            data = serial_port.read(100)
+            data = serial_port.readline()
+            # data = serial_port.read(100)
             data = data.decode("utf-8")
             logger.info("data: {}".format(data))
             if data:
