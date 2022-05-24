@@ -36,10 +36,8 @@ if __name__ == "__main__":
 
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
-    
-                serial_port.write(bytes(finger_id))
                 if "Re" in data:
-                    finger_id = b'' + str(random.randint(1, 127) )
+                    finger_id = str(random.randint(1, 127) )
                     logger.info(f"Sending Data to Arduino: {finger_id}")
                     
                     serial_port.write(bytes(finger_id))
