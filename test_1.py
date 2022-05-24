@@ -43,11 +43,6 @@ if __name__ == "__main__":
                     serial_port.write(bytes(finger_id, "utf-8"))
                     serial_port.flush()
                     # serial_port.write('{}'.format(finger_id))
-                    
-                    time.sleep(0.5)
-                    
-                    serial_port.reset_input_buffer()
-                    serial_port.reset_output_buffer()
         except Exception as e:
             logger.error(e)
         # time.sleep(0.1)
