@@ -3,21 +3,13 @@ import os,sys
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(CURRENT_DIR))
 
-from device.FingerprintSensor import FingerprintSensor
-from utils.utils import get_logger
+from utils.utils import get_logger, get_serial_ports
 
 logger =get_logger(name=__name__)
 
+ports = get_serial_ports()
 
-for i in range(1, 20):
-    try:
-        fingerprint = FingerprintSensor(
-            baudrate=9600*i,
-        )
-        logger.info( "Baudrate {}".format(9600*i))
-        fingerprint.setup_sensor()
-        logger.info( fingerprint.sensor_details())
-        
-    except Exception as e:
-        logger.info(e)
-        continue
+if __name__ == "__main__":
+    for port, desc, hwid in sorted(ports):
+        logger.info("{}: {} [{}]".format(port, desc, hwid))
+
