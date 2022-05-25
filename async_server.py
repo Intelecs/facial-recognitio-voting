@@ -17,10 +17,6 @@ ports = get_serial_ports()
 _port = None
 serial_port = None
 
-
-
-
-
 for port, desc, hwid in sorted(ports):
     logger.info("{}: {} [{}]".format(port, desc, hwid))
     if "USB-Serial" in desc:
@@ -64,7 +60,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 serial_port.write(bytes(str(message), "utf-8"))
                 serial_port.flush()
             
-            if serial_port.in_waiting > 0:  
+            while serial_port.in_waiting > 0:  
                 data = serial_port.readline()
                 data = data.decode()
 
