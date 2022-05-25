@@ -4,6 +4,7 @@ import uvicorn
 import serial
 from starlette.websockets import WebSocket
 import os, sys
+import multiprocessing
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(CURRENT_DIR))
@@ -18,6 +19,8 @@ serial_port = None
 
 
 
+
+
 for port, desc, hwid in sorted(ports):
     logger.info("{}: {} [{}]".format(port, desc, hwid))
     if "USB-Serial" in desc:
@@ -27,31 +30,34 @@ for port, desc, hwid in sorted(ports):
 serial_port = serial.Serial(_port, baudrate=9600)
 serial_port.reset_input_buffer()
 
-@app.route("/send-finger/{id}")
-async def send_fingerprint_id(request):
-    id = int(request.path_params["id"])
+# @app.route("/send-finger/{id}")
+# async def send_fingerprint_id(request):
+#     id = int(request.path_params["id"])
     
-    if not isinstance(1, int):
-        return JSONResponse({"error": "Invalid id Type"})
-    if id < 1 or id > 127:
-        return JSONResponse({"error": "Invalid id Range"})
+#     if not isinstance(1, int):
+#         return JSONResponse({"error": "Invalid id Type"})
+#     if id < 1 or id > 127:
+#         return JSONResponse({"error": "Invalid id Range"})
     
-    serial_port.write(bytes(str(id), "utf-8"))
-    serial_port.flush()
-    return JSONResponse({"id": id})
+#     if not serial_process.input_queue.empty():
+#         data = serial_process.input_queue.get()
+#         serial_process.write(bytes(str(data), "utf-8"))
+#     # serial_port.write(bytes(str(id), "utf-8"))
+#     # serial_port.flush()
+#     return JSONResponse({"id": id})
 
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            if serial_port.in_waiting > 0:
-                data = serial_port.readline()
-                data = data.decode()
-                if data:
-                    logger.info("Cleaned message: {}".format(data.strip()))
-                    await websocket.send_text(data)
-            # await websocket.send_text(f"{message} from pi")
+            if not serial_port.in_waiting:
+                await websocket.receive_text()
+                continue
+            data = serial_port.readline()
+            data = data.decode()
+            if data:
+                await websocket.send_text(data)
     except Exception as e:
         logger.error(e)
         await websocket.close()
