@@ -45,10 +45,12 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            receive_text = serial_port.readline()
-            receive_text = receive_text.decode()
-            print(receive_text)
-            await websocket.send_text(receive_text)
+            if serial_port.in_waiting() > 0:
+                data = serial_port.readline()
+                data = data.decode()
+                if data:
+                    logger.info("Cleaned message: {}".format(data.strip()))
+                    await websocket.send_text(data)
             # await websocket.send_text(f"{message} from pi")
     except Exception as e:
         logger.error(e)
