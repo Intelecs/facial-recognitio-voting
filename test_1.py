@@ -19,8 +19,6 @@ if __name__ == "__main__":
             _port = port
             break
     if _port is not None:
-    # logger.info("No USB-Serial port found")
-        
         serial_port = serial.Serial(_port, baudrate=9600)
         serial_port.reset_input_buffer()
 
