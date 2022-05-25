@@ -5,6 +5,7 @@ import serial
 from starlette.websockets import WebSocket
 import os, sys
 import multiprocessing
+import time
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(CURRENT_DIR))
@@ -59,14 +60,27 @@ async def websocket_endpoint(websocket: WebSocket):
             if message.isnumeric():
                 serial_port.write(bytes(str(message), "utf-8"))
                 serial_port.flush()
-            
-            if serial_port.in_waiting > 0:
-                logger.info("Reading from Serial Port")
-                data = serial_port.read(100)
-                data = data.decode()
+                time.sleep(0.1)
+            reading = True
+            buffer = None
+            while reading:
+                if serial_port.in_waiting > 0:
+                    data += serial_port.read(
+                        serial_port.in_waiting
+                    )
+                    data = data.decode()
+                    print(data)
+                    # await websocket.send_text(data)
+                    
+                else:
+                    reading = False
+            # if serial_port.in_waiting > 0:
+            #     logger.info("Reading from Serial Port")
+            #     data = serial_port.read_until(b'\n')
+            #     data = data.decode()
 
-                if not data.isnumeric():
-                    await websocket.send_text(data)
+            #     if not data.isnumeric():
+            #         await websocket.send_text(data)
             
     except Exception as e:
         logger.error(e)
