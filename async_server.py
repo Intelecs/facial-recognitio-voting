@@ -58,7 +58,7 @@ async def websocket_endpoint(websocket: WebSocket):
             #     serial_port.write(bytes(str(message), "utf-8"))
             #     serial_port.flush()
             
-            if serial_port.in_waiting > 0:  
+            if serial_port.in_waiting:  
                 data = serial_port.readline()
                 data = data.decode()
                 print(data)
