@@ -15,7 +15,7 @@ logger =get_logger(name=__name__)
 ports = get_serial_ports()
 _port = None
 serial_port = None
-serial_port.reset_input_buffer()
+
 
 
 for port, desc, hwid in sorted(ports):
@@ -25,6 +25,7 @@ for port, desc, hwid in sorted(ports):
         break
 
 serial_port = serial.Serial(_port, baudrate=9600)
+serial_port.reset_input_buffer()
 
 @app.route("/send-finger{id}", methods=["GET"])
 async def send_fingerprint_id(request, id):
