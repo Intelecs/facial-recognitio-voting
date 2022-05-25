@@ -119,7 +119,7 @@ if __name__ == '__main__':
     print ("Listening on port:", options.port)
 
     mainLoop = tornado.ioloop.IOLoop.instance()
-    scheduler_interval = 1
+    scheduler_interval = 10
     scheduler = tornado.ioloop.PeriodicCallback(checkQueue, scheduler_interval)
     scheduler.start()
     mainLoop.start()
