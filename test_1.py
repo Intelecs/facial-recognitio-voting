@@ -26,6 +26,8 @@ if __name__ == "__main__":
         serial_port.reset_input_buffer()
         # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
+            
+            
 
             if serial_port.inWaiting() > 0:
                 data = serial_port.readline()
