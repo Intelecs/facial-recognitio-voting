@@ -62,6 +62,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             if not data.isnumeric():
                 await websocket.send_text(data)
+            serial_port.reset_input_buffer()
     except Exception as e:
         logger.error(e)
         await websocket.close()
