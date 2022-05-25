@@ -27,7 +27,7 @@ for port, desc, hwid in sorted(ports):
 serial_port = serial.Serial(_port, baudrate=9600)
 serial_port.reset_input_buffer()
 
-@app.route("/send-finger{id}", methods=["GET"])
+@app.route("/send-finger/{id}", methods=["GET"])
 async def send_fingerprint_id(request, id):
     if not isinstance(int(id), int):
         return JSONResponse({"error": "Invalid id Type"})
