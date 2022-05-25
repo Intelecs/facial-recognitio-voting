@@ -51,7 +51,7 @@ class SerialProcess(multiprocessing.Process):
         # time.sleep(1)
         
     def readSerial(self):
-        return self.sp.readline().replace("\n", "")
+        return self.sp.readline().decode()
  
     def run(self):
  
