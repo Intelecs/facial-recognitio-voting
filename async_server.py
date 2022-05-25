@@ -36,7 +36,7 @@ async def send_fingerprint_id(request):
     if id < 1 or id > 127:
         return JSONResponse({"error": "Invalid id Range"})
     
-    serial_port.write(bytes(id, "utf-8"))
+    serial_port.write(bytes(str(id), "utf-8"))
     serial_port.flush()
     return JSONResponse({"id": id})
 
