@@ -46,7 +46,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             message = await websocket.receive_text()
-            receive_text = serial_port.read(serial_port.inWaiting())
+            receive_text = serial_port.readline()
             receive_text = receive_text.decode()
             print(receive_text)
             await websocket.send_text(receive_text)
