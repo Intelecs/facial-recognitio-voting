@@ -29,8 +29,8 @@ serial_port.reset_input_buffer()
 
 @app.route("/send-finger/{id}")
 async def send_fingerprint_id(request):
-    id = request.path_params["id"]
-    print(id)
+    id = int(request.path_params["id"])
+    
     if not isinstance(1, int):
         return JSONResponse({"error": "Invalid id Type"})
     if id < 1 or id > 127:
