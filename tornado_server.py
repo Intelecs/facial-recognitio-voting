@@ -85,7 +85,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
  
     def on_message(self, message):
         print ('tornado received from client: %s' % message)
-        self.write_message('got it!')
+        self.write_message('received from client: %s' % message)
  
     def on_close(self):
         print ('connection closed')
