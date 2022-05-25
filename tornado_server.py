@@ -41,14 +41,14 @@ class SerialProcess(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
         self.input_queue = input_queue
         self.output_queue = output_queue
-        self.sp = serial.Serial(SERIAL_PORT, SERIAL_BAUDRATE, timeout=1)
+        self.sp = serial.Serial(SERIAL_PORT, SERIAL_BAUDRATE)
  
     def close(self):
         self.sp.close()
  
     def writeSerial(self, data):
         self.sp.write(data)
-        # time.sleep(1)
+        time.sleep(1)
         
     def readSerial(self):
         return self.sp.readline().decode()
@@ -59,6 +59,8 @@ class SerialProcess(multiprocessing.Process):
  
         while True:
             # look for incoming tornado request
+            data = self.input_queue.get()
+            print("Some data ", data)
             if not self.input_queue.empty():
                 data = self.input_queue.get()
  
@@ -79,12 +81,10 @@ class IndexHandler(tornado.web.RequestHandler):
  
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        print ('new connection')
         clients.append(self)
         self.write_message("connected")
  
     def on_message(self, message):
-        print ('tornado received from client: %s' % message)
         self.write_message('received from client: %s' % message)
  
     def on_close(self):
