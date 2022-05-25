@@ -49,6 +49,7 @@ serial_port.reset_input_buffer()
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
+    serial_port.reset_input_buffer()
     try:
         while True:
             # if not serial_port.in_waiting > 0:
@@ -65,7 +66,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
                 if not data.isnumeric():
                     await websocket.send_text(data)
-                    serial_port.reset_input_buffer()
+            serial_port.reset_input_buffer()
     except Exception as e:
         logger.error(e)
         # await websocket.close()
