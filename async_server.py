@@ -53,7 +53,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             if not serial_port.in_waiting:
                 message = await websocket.receive_text()
-                print(message)
+                serial_port.write(bytes(message, "utf-8"))
                 continue
             data = serial_port.readline()
             data = data.decode()
