@@ -44,7 +44,10 @@ async def send_fingerprint_id(request):
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
-        pass
+        while True:
+            message = await websocket.receive_text()
+            print(message)
+            await websocket.send_text(f"{message} from pi")
     except Exception as e:
         logger.error(e)
         await websocket.close()
