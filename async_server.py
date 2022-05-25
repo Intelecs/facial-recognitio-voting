@@ -49,7 +49,7 @@ serial_port.reset_input_buffer()
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    serial_port.reset_input_buffer()
+    serial_port.flushInput()
     try:
         while True:
             # if not serial_port.in_waiting > 0:
