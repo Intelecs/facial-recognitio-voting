@@ -90,6 +90,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         print ('connection closed')
         clients.remove(self)
+    
+    def check_origin(self, origin):
+        return True
 ## check the queue for pending messages, and rely that to all connected clients
 def checkQueue():
     if not output_queue.empty():
