@@ -52,11 +52,11 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             # if not serial_port.in_waiting > 0:
-            message = await websocket.receive_text()
-            print(message)
-            if message.isnumeric():
-                serial_port.write(bytes(str(message), "utf-8"))
-                serial_port.flush()
+            # message = await websocket.receive_text()
+            # print(message)
+            # if message.isnumeric():
+            #     serial_port.write(bytes(str(message), "utf-8"))
+            #     serial_port.flush()
             
             if serial_port.in_waiting > 0:  
                 data = serial_port.readline()
