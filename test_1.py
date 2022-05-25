@@ -27,10 +27,11 @@ if __name__ == "__main__":
         # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
 
-            data = serial_port.readline()
-            data = data.decode()
-            # serial_port.flush()
-
+            if serial_port.inWaiting() > 0:
+                data = serial_port.readline()
+                data = data.decode()
+                print(data)
+                
             if data:
                 logger.info("Cleaned message: {}".format(data.strip()))
                 if "Ready" in data:
