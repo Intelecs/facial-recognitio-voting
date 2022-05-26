@@ -24,7 +24,7 @@ for port, desc, hwid in sorted(ports):
         _port = port
         break
 
-serial_port = serial.Serial(_port, baudrate=9600)
+serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 serial_port.reset_input_buffer()
 
 # @app.route("/send-finger/{id}")
@@ -49,31 +49,17 @@ async def websocket_endpoint(websocket: WebSocket):
     serial_port.flushInput()
     try:
         while True:
-            # if not serial_port.in_waiting > 0:
-            # message = await websocket.receive_text()
-            # print(message)
-            # if message.isnumeric():
-            #     serial_port.write(bytes(str(message), "utf-8"))
-            #     serial_port.flush()
 
             message = await websocket.receive_text()
             if message.isnumeric():
                 serial_port.write(bytes(str(message), "utf-8"))
                 serial_port.flush()
-                time.sleep(0.1)
-            reading = True
-            buffer = None
-            while reading:
-                if serial_port.in_waiting > 0:
-                    data += serial_port.read(
-                        serial_port.in_waiting
-                    )
+            elif serial_port.in_waiting > 0:
+                    data = serial_port.readline()
                     data = data.decode()
                     print(data)
-                    # await websocket.send_text(data)
-                    
-                else:
-                    reading = False
+                    await websocket.send_text(data)
+            
             # if serial_port.in_waiting > 0:
             #     logger.info("Reading from Serial Port")
             #     data = serial_port.read_until(b'\n')
