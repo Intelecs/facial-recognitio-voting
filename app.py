@@ -8,8 +8,8 @@ from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 import os, sys
 import asyncio
-import multiprocessing
-import time
+import subprocess
+
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(CURRENT_DIR))
@@ -70,6 +70,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
 
             message = await websocket.receive_text()
+            
             async def read_serial():
                 while is_running:
                     if serial_port.inWaiting() > 0:
@@ -83,6 +84,11 @@ async def websocket_endpoint(websocket: WebSocket):
                 serial_port.flush()
             else:
                 logger.info(message)
+                if message == "train":
+                    command = "python training.py"
+                    subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8', universal_newlines=True)
+                    logger.info("Training Started")
+                    await websocket.send_json({"status": "Training"})
             
             loop = asyncio.get_running_loop()
             loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
