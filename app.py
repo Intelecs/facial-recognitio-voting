@@ -1,3 +1,4 @@
+from cProfile import run
 from importlib import reload
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
@@ -90,8 +91,11 @@ async def websocket_endpoint(websocket: WebSocket):
                     logger.info("Training Started")
                     await websocket.send_json({"status": "Training"})
             
-            loop = asyncio.get_running_loop()
-            loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
+            try:
+                loop = asyncio.get_running_loop()
+                loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
+            except Exception as e:
+                loop.run_until_complete(asyncio.gather(read_serial()))
             
     except Exception as e:
         logger.error(e, exc_info=True)
