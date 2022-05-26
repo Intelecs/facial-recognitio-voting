@@ -94,7 +94,7 @@ async def websocket_endpoint(websocket: WebSocket):
             loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
             
     except Exception as e:
-        logger.error(e)
+        logger.error(e, exc_info=True)
         # await websocket.close()
 
 
