@@ -7,6 +7,7 @@ from starlette.websockets import WebSocket
 from starlette.responses import FileResponse 
 from starlette.staticfiles import StaticFiles
 import os, sys
+import asyncio
 import multiprocessing
 import time
 
@@ -58,6 +59,7 @@ async  def index(request):
 
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    is_running = True
     await websocket.accept()
     try:
         serial_port.flushInput()
@@ -68,28 +70,22 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
 
             message = await websocket.receive_text()
+            async def read_serial():
+                while is_running:
+                    if serial_port.inWaiting() > 0:
+                        data = serial_port.readline()
+                        data = data.decode()
+                        logger.info(data)
+                        await websocket.send_text(data)
+            
             if message.isnumeric():
                 serial_port.write(bytes(str(message), "utf-8"))
                 serial_port.flush()
             else:
                 logger.info(message)
             
-            try:
-                if serial_port.in_waiting > 0:
-                    data = serial_port.readline()
-                    data = data.decode()
-                    logger.info(data)
-                    await websocket.send_text(data)
-            except Exception as e:
-                pass
-            
-            # if serial_port.in_waiting > 0:
-            #     logger.info("Reading from Serial Port")
-            #     data = serial_port.read_until(b'\n')
-            #     data = data.decode()
-
-            #     if not data.isnumeric():
-            #         await websocket.send_text(data)
+            loop = asyncio.get_running_loop()
+            loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
             
     except Exception as e:
         logger.error(e)
