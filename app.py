@@ -32,12 +32,9 @@ for port, desc, hwid in sorted(ports):
         _port = port
         break
 
-try:
-    serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
-    serial_port.reset_input_buffer()
-except Exception as e:
-    logger.error(e)
-    serial_port = None
+serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
+serial_port.reset_input_buffer()
+
 
 @app.route("/")
 async  def index(request):
@@ -71,7 +68,6 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
 
             message = await websocket.receive_text()
-            await websocket.send_text("Hello from server!")
             if message.isnumeric():
                 serial_port.write(bytes(str(message), "utf-8"))
                 serial_port.flush()
@@ -82,7 +78,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 if serial_port.in_waiting > 0:
                     data = serial_port.readline()
                     data = data.decode()
-                    print(data)
+                    logger.info(data)
                     await websocket.send_text(data)
             except Exception as e:
                 pass
