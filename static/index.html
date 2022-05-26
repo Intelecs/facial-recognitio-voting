@@ -48,6 +48,7 @@
                 <td id="finger-print-status"></td>
                 <td><div class="spinner-grow spinner-grow-sm text-warning"></div></td>
             </tr>
+            
         </thead>
      </table>  
   </div>
@@ -157,17 +158,28 @@
         var socket = new WebSocket('ws:localhost:8000/ws');
         var  finger_status = document.getElementById('finger-print-status');
         var vote_btn = document.getElementById('vote-btn');
+        var input_nae = document.getElementById('input_name');
         socket.onopen = function () {
-            console.log('Connected');
+            console.log('Connected to server');
+        
         };
         socket.onmessage = function (event) {
           var data = JSON.parse(event.data);
           if (data.sensor === "finger_print") {
             finger_status.innerHTML = data.status;
           }
+          if (data.command === "w") {
+            var  message = `Wating for a finger ${some_id}`
+            finger_status.innerHTML = message;
+          }
+          if (data.command === "p") {
+            var  message = `Processing finger ${some_id}`
+            finger_status.innerHTML = message;
+          }
         }
 
         vote_btn.addEventListener('click', function () {
+            socket.send(input_nae.value);
             socket.send(JSON.stringify({
                 "sensor": "finger_print",
                 "status": "voted"

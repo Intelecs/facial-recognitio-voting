@@ -76,7 +76,7 @@ async def websocket_endpoint(websocket: WebSocket):
                         data = serial_port.readline()
                         data = data.decode()
                         logger.info(data)
-                        await websocket.send_text(data)
+                        await websocket.send_json({"command": data})
             
             if message.isnumeric():
                 serial_port.write(bytes(str(message), "utf-8"))
