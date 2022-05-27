@@ -69,6 +69,12 @@
      </table>  
   </div>
 </div>
+    <div>
+      <div class="mb-3 mt-3">
+        <label for="id" class="form-label">ID</label>
+        <input type="text" class="form-control" id="fingerId" placeholder="Enter id" name="name" req>
+      </div>
+    </div>
  </div>
         <div class="col-lg-8">
         <p><b>CANDIDATES</b></p>
@@ -155,7 +161,7 @@
 
      
 <script>
-        var socket = new WebSocket('ws:localhost:8000/ws');
+        var socket = new WebSocket('ws:192.168.46.45:8000/ws');
         var  finger_status = document.getElementById('finger-print-status');
         var vote_btn = document.getElementById('vote-btn');
         var input_nae = document.getElementById('input_name');
@@ -179,9 +185,10 @@
         }
 
         vote_btn.addEventListener('click', function () {
+         // var fingerId = document.getElementById('fingerId');
             socket.send(input_nae.value);
             socket.send(JSON.stringify({
-                "sensor": "finger_print",
+                "sensor": 1,
                 "status": "voted"
             }));
         });
@@ -192,8 +199,6 @@
         };
 
 </script>
-
- <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
