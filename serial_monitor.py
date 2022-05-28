@@ -20,6 +20,7 @@ for port, desc, hwid in sorted(ports):
 _port = None
 serial_port = None
 serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
+serial_port.open()
 
 async def socket_client():
     async with websockets.connect('ws://localhost:5555/ws') as websocket:
