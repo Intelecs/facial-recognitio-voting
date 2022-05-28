@@ -4,7 +4,7 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 import uvicorn
 import serial
-from starlette.websockets import WebSocket
+from starlette.websockets import WebSocket, WebSocketState
 from starlette.responses import FileResponse 
 from starlette.staticfiles import StaticFiles
 import os, sys
@@ -37,6 +37,17 @@ for port, desc, hwid in sorted(ports):
 
 serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 
+HEART_BEAT_INTERVAL = 5
+async def is_websocket_active(ws: WebSocket) -> bool:
+    if not (ws.application_state == WebSocketState.CONNECTED and ws.client_state == WebSocketState.CONNECTED):
+        return False
+    try:
+        await asyncio.wait_for(ws.send_json({'type': 'ping'}), HEART_BEAT_INTERVAL)
+        message = await asyncio.wait_for(ws.receive_json(), HEART_BEAT_INTERVAL)
+        assert message['type'] == 'pong'
+    except BaseException:  # asyncio.TimeoutError and ws.close()
+        return False
+    return True
 
 
 @app.route("/")
@@ -56,6 +67,9 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
 
             message = await websocket.receive_text()
+
+            if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
+                websocket.accept()
             
             async def read_serial():
                 while is_running:
