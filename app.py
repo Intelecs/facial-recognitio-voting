@@ -56,21 +56,18 @@ serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
-        await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
-    except Exception as e:
-        await websocket.send_json({"status": "Disconnected", "sensor": "finger_print"})
-    try:
         while True:
 
             async def read_serial():
                 while True:
                     try:
                         if serial_port.in_waiting:
-                            data = serial_port.readline().decode().strip()
+                            data = serial_port.readline()
+                            data = data.decode()
                             await websocket.send(data)
                             logger.info("Received Data from Serial Port: {}".format(data))
                     except Exception as e:
-                        logger.error(e)
+                        logger.error(f"Error in sending data {e}")
             
             try:
                 asyncio.create_task(read_serial())
@@ -99,7 +96,7 @@ async def websocket_endpoint(websocket: WebSocket):
             
 
     except Exception as e:
-        logger.error(e, exc_info=True)
+        logger.error(f"Error message f{e}", exc_info=True)
         # await websocket.close()
 
 
