@@ -67,24 +67,24 @@ async def websocket_endpoint(websocket: WebSocket):
                             await websocket.send(data)
                             logger.info("Received Data from Serial Port: {}".format(data))
                     except Exception as e:
-                        logger.error(f"Error in sending data {e}")
+                        logger.error(f"Error in sending data {e}", exc_info=True)
             
             try:
                 asyncio.create_task(read_serial())
                 await asyncio.sleep(0.1)
             except Exception as e:
-                logger.error(f"Error in runnin serial {e}")
+                logger.error(f"Error in runnin serial {e}", exc_info=True)
             
             message = await websocket.receive_text()
             if message == 'R':
                 try:
-                    logger.info(f"Received message Socket {message}")
-                    serial_port.write(b'R')
+                    logger.info(f"Received message Socket {message}", exc_info=True)
+                    serial_port.write(bytes(message, 'utf-8'))
                     serial_port.flush()
                 except Exception as e:
-                    logger.error(f"Error in sending data {e}")
+                    logger.error(f"Error in sending data {e}", exc_info=True)
             else:
-                logger.info(f"Received message from Socket {message}")
+                logger.info(f"Received message from Socket {message}", exc_info=True)
             
             if message.isnumeric():
                 try:
@@ -92,7 +92,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     serial_port.flush()
                     logger.info(f"Sendig message {message}")
                 except Exception as e:
-                    logger.error(f"Error in sending data {e}")
+                    logger.error(f"Error in sending data {e}", exc_info=True)
             
 
     except Exception as e:
