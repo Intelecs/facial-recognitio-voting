@@ -107,13 +107,12 @@ async def websocket_endpoint(websocket: WebSocket):
                 try:
                     serial_port.write(bytes(message, 'utf-8'))
                     serial_port.flush()
-
-                    if serial_port.inWaiting() > 0:
-                        data = serial_port.readline()
-                        data = data.decode()
-                        await websocket.send_text(data)
-                        logger.info("Received Data from Serial Port: {}".format(data))
-                        serial_port.flushInput()
+                    
+                    data = serial_port.readline()
+                    data = data.decode()
+                    await websocket.send_text(data)
+                    logger.info("Received Data from Serial Port: {}".format(data))
+                    serial_port.flushInput()
                     logger.info(f"Sendig message {message}")
                 except Exception as e:
                     logger.error(f"Error in sending data {e}", exc_info=True)
