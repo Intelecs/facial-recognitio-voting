@@ -77,6 +77,8 @@ async def websocket_endpoint(websocket: WebSocket):
                     serial_port.write(bytes(str(message), "utf-8"))
                     serial_port.flush()
                 else:
+                    if message == '':
+                        continue
                     logger.info(f"Message from client: %s" % message)
 
             except Exception as e:
