@@ -67,66 +67,81 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
 
-            message = await websocket.receive_text()
-
+            # message = await websocket.receive_text()
             try:
-                if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
-                    websocket.accept()
-                    await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
-                else:
-                    logger.info("Something happened to client ")
-                    try:
-                        if serial_port.isOpen():
-                            pass
-                        else:
-                            serial_port.open()
-                    except Exception as e:
-                        logger.info(e)
-            except Exception as e:
-                logger.error(e)
-                await websocket.send_json({"status": "Disconnected", "sensor": "finger_print"})
-                continue
-            
-            async def read_serial():
-                while is_running:
-                    try:
-                        if serial_port.inWaiting() > 0 :
-                            data = serial_port.readline()
-                            data = data.decode()
-                            logger.info(data)
-                            await websocket.send_text(data)
-                        
-                    except Exception as e:
-                        logger.error(e)
-                        await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
-                        # serial_port.close()
-                        continue
-            
-            if message.isnumeric():
-                try:
-                    await websocket.send_json({"status": "Sent", "sensor": "finger_print"})
+                if serial_port.inWaiting() > 0 :
+                    data = serial_port.readline()
+                    data = data.decode()
+                    await websocket.send_text(data)
+                message = await websocket.receive_text()
+                if message.isnumeric():
                     serial_port.write(bytes(str(message), "utf-8"))
                     serial_port.flush()
-                except Exception as e:
-                    logger.error(e)
-                    await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
-                    # serial_port.close()
-                    continue
-            else:
-                logger.info(message)
-                if message == "train":
-                    command = "python training.py"
-                    subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8', universal_newlines=True)
-                    logger.info("Training Started")
-                    await websocket.send_json({"status": "Training"})
-            
+                
+                else:
+                    logger.info(f"Received message: {message}")
+
+            except Exception as e:
+                logger.error(e)
+
             # try:
-            loop = asyncio.get_running_loop()
-            loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
+            #     if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
+            #         websocket.accept()
+            #         await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
+            #     else:
+            #         logger.info("Something happened to client ")
+            #         try:
+            #             if serial_port.isOpen():
+            #                 pass
+            #             else:
+            #                 serial_port.open()
+            #         except Exception as e:
+            #             logger.info(e)
             # except Exception as e:
             #     logger.error(e)
-            #     # loop.run_until_complete(asyncio.gather(read_serial()))
+            #     await websocket.send_json({"status": "Disconnected", "sensor": "finger_print"})
             #     continue
+            
+            # async def read_serial():
+            #     while is_running:
+            #         try:
+            #             if serial_port.inWaiting() > 0 :
+            #                 data = serial_port.readline()
+            #                 data = data.decode()
+            #                 logger.info(data)
+            #                 await websocket.send_text(data)
+                        
+            #         except Exception as e:
+            #             logger.error(e)
+            #             await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
+            #             # serial_port.close()
+            #             continue
+            
+            # if message.isnumeric():
+            #     try:
+            #         await websocket.send_json({"status": "Sent", "sensor": "finger_print"})
+            #         serial_port.write(bytes(str(message), "utf-8"))
+            #         serial_port.flush()
+            #     except Exception as e:
+            #         logger.error(e)
+            #         await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
+            #         # serial_port.close()
+            #         continue
+            # else:
+            #     logger.info(message)
+            #     if message == "train":
+            #         command = "python training.py"
+            #         subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8', universal_newlines=True)
+            #         logger.info("Training Started")
+            #         await websocket.send_json({"status": "Training"})
+            
+            # # try:
+            # loop = asyncio.get_running_loop()
+            # loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
+            # # except Exception as e:
+            # #     logger.error(e)
+            # #     # loop.run_until_complete(asyncio.gather(read_serial()))
+            # #     continue
             
     except Exception as e:
         logger.error(e, exc_info=True)
