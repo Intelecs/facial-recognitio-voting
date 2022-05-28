@@ -11,6 +11,7 @@ from starlette.staticfiles import StaticFiles
 import os, sys
 from typing import List
 import asyncio
+from threading import Thread
 import subprocess
 
 import websockets
@@ -54,15 +55,18 @@ serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    
     await websocket.accept()
     try:
         while True:
+            is_running = True
+            
 
             async def read_serial():
-                while True:
+                while is_running:
                     try:
                         if serial_port.inWaiting() > 0:
-                            data = serial_port.read()
+                            data = serial_port.readline()
                             data = data.decode()
                             await websocket.send_text(data)
                             logger.info("Received Data from Serial Port: {}".format(data))
@@ -70,8 +74,11 @@ async def websocket_endpoint(websocket: WebSocket):
                         logger.error(f"Error in sending data {e}", exc_info=True)
             
             try:
-                asyncio.create_task(read_serial())
-                await asyncio.sleep(0.1)
+                # asyncio.create_task(read_serial())
+                # await asyncio.sleep(0.1)
+                Thread(target=lambda: asyncio.run(
+                    read_serial()
+                )).start()
             except Exception as e:
                 logger.error(f"Error in runnin serial {e}", exc_info=True)
             

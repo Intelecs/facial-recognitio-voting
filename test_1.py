@@ -24,11 +24,7 @@ if __name__ == "__main__":
 
     while True:
         serial_port.reset_input_buffer()
-        # serial_port = serial.Serial("/dev/ttyUSB1", baudrate=9600)
         try:
-            
-            
-
             if serial_port.inWaiting() > 0:
                 data = serial_port.readline()
                 data = data.decode()
@@ -39,7 +35,6 @@ if __name__ == "__main__":
                 if "Ready" in data:
                     finger_id = str(random.randint(1, 127) )
                     logger.info(f"Sending Data to Arduino: {finger_id}")
-                    
                     serial_port.write(bytes(finger_id, "utf-8"))
                     serial_port.flush()
                     # serial_port.write('{}'.format(finger_id))
