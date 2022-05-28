@@ -35,9 +35,8 @@ async def socket_client():
                         logger.info("Received Data from Serial Port: {}".format(data))
                         await websocket.send(data)
                 message = await websocket.recv()
-                logger.info(f"Received message {message}")
-                if message is not None:
-                    if message.isnumeric():
+                logger.info(f"Received message Socket {message}")
+                if message.isnumeric():
                         serial_port.write(bytes(message, 'utf-8'))
                         serial_port.flush()
                         logger.info(f"Sendig message {message}")
