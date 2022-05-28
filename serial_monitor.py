@@ -30,20 +30,21 @@ async def socket_client():
             try:
                 message = await websocket.recv()
                 if message == 'R':
-                    serial_port.write(bytes('R', 'utf-8'))
+                    logger.info(f"Received message Socket {message}")
+                    serial_port.write(b'R')
                     serial_port.flush()
+                
+
+                if message.isnumeric():
+                        serial_port.write(bytes(message, 'utf-8'))
+                        serial_port.flush()
+                        logger.info(f"Sendig message {message}")
                 if serial_port.inWaiting() > 0 :
                         data = serial_port.readline()
                         data = data.decode()
                         logger.info("Received Data from Serial Port: {}".format(data))
                         await websocket.send(data)
-                
-                logger.info(f"Received message Socket {message}")
-                if message.isnumeric():
-                        serial_port.write(bytes(message, 'utf-8'))
-                        serial_port.flush()
-                        logger.info(f"Sendig message {message}")
-                        
+                                        
             except Exception as e:
                 logger.info(f"Erorr reading message {e}", exc_info=True)
 
