@@ -71,6 +71,16 @@ async def websocket_endpoint(websocket: WebSocket):
             if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
                 websocket.accept()
             
+            try:
+                if serial_port.isOpen():
+                    pass
+                else:
+                    serial_port.open()
+            except Exception as e:
+                logger.error(e)
+                await websocket.send_json({"status": "Disconnected", "sensor": "finger_print"})
+                continue
+            
             async def read_serial():
                 while is_running:
                     try:
@@ -82,6 +92,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     except Exception as e:
                         logger.error(e)
                         await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
+                        serial_port.close()
                         continue
             
             if message.isnumeric():
