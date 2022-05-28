@@ -33,8 +33,6 @@ async def socket_client():
                     logger.info(f"Received message Socket {message}")
                     serial_port.write(b'R')
                     serial_port.flush()
-                
-
                 if message.isnumeric():
                         serial_port.write(bytes(message, 'utf-8'))
                         serial_port.flush()
