@@ -69,16 +69,19 @@ async def websocket_endpoint(websocket: WebSocket):
 
             message = await websocket.receive_text()
 
-            if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
-                websocket.accept()
-                await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
-            else:
-                logger.info("Something happened to client ")
             try:
-                if serial_port.isOpen():
-                    pass
+                if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
+                    websocket.accept()
+                    await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
                 else:
-                    serial_port.open()
+                    logger.info("Something happened to client ")
+                    try:
+                        if serial_port.isOpen():
+                            pass
+                        else:
+                            serial_port.open()
+                    except Exception as e:
+                        logger.info(e)
             except Exception as e:
                 logger.error(e)
                 await websocket.send_json({"status": "Disconnected", "sensor": "finger_print"})
