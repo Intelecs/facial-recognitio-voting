@@ -28,6 +28,12 @@ async def socket_client():
         
         while True:
             try:
+
+                if serial_port.inWaiting() > 0 :
+                        data = serial_port.readline()
+                        data = data.decode()
+                        logger.info("Received Data from Serial Port: {}".format(data))
+                        await websocket.send(data)
                 message = await websocket.recv()
                 logger.info(f"Received message {message}")
                 if message is not None:
@@ -35,11 +41,7 @@ async def socket_client():
                         serial_port.write(bytes(message, 'utf-8'))
                         serial_port.flush()
                         logger.info(f"Sendig message {message}")
-                if serial_port.inWaiting() > 0 :
-                        data = serial_port.readline()
-                        data = data.decode()
-                        logger.info("Received Data from Serial Port: {}".format(data))
-                        await websocket.send(data)
+                        
             except Exception as e:
                 logger.info(f"Erorr reading message {e}", exc_info=True)
 
