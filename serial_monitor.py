@@ -11,14 +11,16 @@ import websockets
 logger =get_logger(name=__name__)
 ports = get_serial_ports()
 
+_port = None
+serial_port = None
 for port, desc, hwid in sorted(ports):
     logger.info("{}: {} [{}]".format(port, desc, hwid))
     if "USB-Serial" in desc:
         _port = port
         break
 
-_port = None
-serial_port = None
+
+
 serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 serial_port.open()
 
