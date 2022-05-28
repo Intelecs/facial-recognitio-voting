@@ -1,5 +1,6 @@
 from cProfile import run
 from importlib import reload
+from cv2 import log
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 import uvicorn
@@ -70,7 +71,9 @@ async def websocket_endpoint(websocket: WebSocket):
 
             if not (websocket.application_state == WebSocketState.CONNECTED and websocket.client_state == WebSocketState.CONNECTED):
                 websocket.accept()
-            
+                await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
+            else:
+                logger.info("Something happened to client ")
             try:
                 if serial_port.isOpen():
                     pass
@@ -84,11 +87,12 @@ async def websocket_endpoint(websocket: WebSocket):
             async def read_serial():
                 while is_running:
                     try:
-                        if serial_port.inWaiting() > 0:
+                        if serial_port.inWaiting() > 0 :
                             data = serial_port.readline()
                             data = data.decode()
                             logger.info(data)
                             await websocket.send_text(data)
+                        
                     except Exception as e:
                         logger.error(e)
                         await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
