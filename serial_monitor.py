@@ -34,7 +34,6 @@ def on_message(ws, message):
             serial_port.write(bytes(message, 'utf-8'))
             serial_port.flush()
             logger.info(f"Sendig message {message}")
-        ws.close()
     threading.Thread(target=run).start()
 # async def socket_client():
 #     async with websockets.connect('ws://localhost:5555/ws') as websocket:
