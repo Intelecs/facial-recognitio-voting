@@ -61,11 +61,11 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             is_running = True
             # await websocket.send_json({"message": "ping"})
-            data = serial_port.readline()
-            data = data.decode()
-            if data is not '':
-                logger.info("Received Data from Serial Port: {}".format(data))
-                serial_port.flushInput()
+            # data = serial_port.readline()
+            # data = data.decode()
+            # if data != '':
+            #     logger.info("Received Data from Serial Port: {}".format(data))
+            #     serial_port.flushInput()
 
             async def read_serial():
                 while is_running:
@@ -85,22 +85,17 @@ async def websocket_endpoint(websocket: WebSocket):
                             pass
                         logger.error(f"Error in sending data {e}", exc_info=True)
             
-            # try:
-            #     # asyncio.create_task(read_serial())
-            #     # await asyncio.sleep(0.1)
-            #     Thread(target=lambda: asyncio.run(
-            #         read_serial()
-            #     )).start()
-            # except Exception as e:
-            #     logger.error(f"Error in runnin serial {e}", exc_info=True)
-            
             message = await websocket.receive_text()
             if message == 'R':
                 try:
                     logger.info(f"Received message Socket {message}", exc_info=True)
                     serial_port.write(bytes(message, 'utf-8'))
                     serial_port.flush()
-                    
+                    data = serial_port.readline()
+                    data = data.decode()
+                    if data != '':
+                        logger.info("Received Data from Serial Port: {}".format(data))
+                    serial_port.flushInput()                    
                 except Exception as e:
                     logger.error(f"Error in sending data {e}", exc_info=True)
             else:
