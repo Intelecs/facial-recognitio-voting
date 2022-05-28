@@ -26,6 +26,8 @@ serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 async def socket_client():
     async with websockets.connect('ws://localhost:5555/ws') as websocket:
         
+        serial_port.write(bytes('R', 'utf-8'))
+        serial_port.flush()
         while True:
             try:
 
