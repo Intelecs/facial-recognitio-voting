@@ -63,8 +63,9 @@ async def websocket_endpoint(websocket: WebSocket):
             # await websocket.send_json({"message": "ping"})
             data = serial_port.readline()
             data = data.decode()
-            logger.info("Received Data from Serial Port: {}".format(data))
-            serial_port.flushInput()
+            if data is not '':
+                logger.info("Received Data from Serial Port: {}".format(data))
+                serial_port.flushInput()
 
             async def read_serial():
                 while is_running:
