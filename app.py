@@ -71,8 +71,11 @@ async def websocket_endpoint(websocket: WebSocket):
                             await websocket.send_text(data)
                             logger.info("Received Data from Serial Port: {}".format(data))
                     except Exception as e:
-                        if serial_port is not None and not serial_port.is_open:
-                            serial_port.open()
+                        try:
+                            if serial_port is not None and not serial_port.is_open:
+                                serial_port.open()
+                        except Exception as e:
+                            pass
                         logger.error(f"Error in sending data {e}", exc_info=True)
             
             try:
