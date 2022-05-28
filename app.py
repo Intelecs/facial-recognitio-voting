@@ -34,29 +34,16 @@ for port, desc, hwid in sorted(ports):
         _port = port
         break
 
-serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
-serial_port.reset_input_buffer()
+try:
+    serial_port = serial.Serial(_port, 115200, timeout=1)
+    serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
+except Exception as e:
+    logger.error(e)
 
 
 @app.route("/")
 async  def index(request):
     return FileResponse(st_abs_file_path + "index.html")
-
-# @app.route("/send-finger/{id}")
-# async def send_fingerprint_id(request):
-#     id = int(request.path_params["id"])
-    
-#     if not isinstance(1, int):
-#         return JSONResponse({"error": "Invalid id Type"})
-#     if id < 1 or id > 127:
-#         return JSONResponse({"error": "Invalid id Range"})
-    
-#     if not serial_process.input_queue.empty():
-#         data = serial_process.input_queue.get()
-#         serial_process.write(bytes(str(data), "utf-8"))
-#     # serial_port.write(bytes(str(id), "utf-8"))
-#     # serial_port.flush()
-#     return JSONResponse({"id": id})
 
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -74,11 +61,16 @@ async def websocket_endpoint(websocket: WebSocket):
             
             async def read_serial():
                 while is_running:
-                    if serial_port.inWaiting() > 0:
-                        data = serial_port.readline()
-                        data = data.decode()
-                        logger.info(data)
-                        await websocket.send_text(data)
+                    try:
+                        if serial_port.inWaiting() > 0:
+                            data = serial_port.readline()
+                            data = data.decode()
+                            logger.info(data)
+                            await websocket.send_text(data)
+                    except Exception as e:
+                        logger.error(e)
+                        await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
+                        continue
             
             if message.isnumeric():
                 serial_port.write(bytes(str(message), "utf-8"))
@@ -95,7 +87,9 @@ async def websocket_endpoint(websocket: WebSocket):
                 loop = asyncio.get_running_loop()
                 loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
             except Exception as e:
-                loop.run_until_complete(asyncio.gather(read_serial()))
+                logger.error(e)
+                # loop.run_until_complete(asyncio.gather(read_serial()))
+                continue
             
     except Exception as e:
         logger.error(e, exc_info=True)
@@ -103,4 +97,4 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 if __name__ == '__main__':
-    uvicorn.run("app:app", host='0.0.0.0', port=8001, reload=True)
+    uvicorn.run("app:app", host='0.0.0.0', port=8000, reload=True)
