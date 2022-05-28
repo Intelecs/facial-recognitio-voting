@@ -63,7 +63,7 @@ def on_message(ws, message):
 
 if __name__ == '__main__':
     # asyncio.get_event_loop().run_until_complete(socket_client())
-    wsapp = websocket.WebSocketApp("'ws://localhost:5555/ws'", on_open=on_open, on_message=on_message, on_close=on_close)
+    wsapp = websocket.WebSocketApp("'ws://localhost:5555/ws'", on_message=on_message)
     wsapp.run_forever()
 
     while True:
