@@ -68,7 +68,7 @@ async def socket_client():
                     asyncio.create_task(run())
                     await asyncio.sleep(0.1)
                 except Exception as e:
-                    pass
+                    logger.info(f"Erorr message {e}", exc_info=True)
                 # asyncio.gather(run())
                 # threading.Thread(target=run).start()
                 # asyncio.run(run())                
