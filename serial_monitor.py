@@ -55,7 +55,7 @@ async def socket_client():
                                     logger.info("Received Data from Serial Port: {}".format(data))
                                     await asyncio.sleep(0.1)
                             except Exception as e:
-                                await asyncio.sleep(0.1)
+                                logger.info(f"Erorr message {e}", exc_info=True)
                                 
                                 # await  websocket.send("Hello")                                pass
                 
@@ -81,14 +81,14 @@ async def socket_client():
                         serial_port.write(b'R')
                         serial_port.flush()
                     except Exception as e:
-                        continue
+                        logger.info(f"Erorr message {e}", exc_info=True)
                 if message.isnumeric():
                     try:
                         serial_port.write(bytes(message, 'utf-8'))
                         serial_port.flush()
                         logger.info(f"Sendig message {message}")
                     except Exception as e:
-                        continue
+                        logger.info(f"Erorr message {e}", exc_info=True)
                                         
             except Exception as e:
                 logger.info(f"Erorr reading message {e}", exc_info=True)
