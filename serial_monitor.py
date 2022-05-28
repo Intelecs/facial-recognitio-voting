@@ -52,7 +52,7 @@ async def socket_client():
                                     data = serial_port.readline()
                                     data = data.decode()
                                     await websocket.send(data)
-                                logger.info("Received Data from Serial Port: {}".format(data))
+                                    logger.info("Received Data from Serial Port: {}".format(data))
                             except Exception as e:
                                 await asyncio.sleep(0.1)
                                 
