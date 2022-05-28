@@ -117,13 +117,13 @@ async def websocket_endpoint(websocket: WebSocket):
                     logger.info("Training Started")
                     await websocket.send_json({"status": "Training"})
             
-            try:
-                loop = asyncio.get_running_loop()
-                loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
-            except Exception as e:
-                logger.error(e)
-                # loop.run_until_complete(asyncio.gather(read_serial()))
-                continue
+            # try:
+            loop = asyncio.get_running_loop()
+            loop.run_in_executor(None, lambda: asyncio.run(read_serial()))
+            # except Exception as e:
+            #     logger.error(e)
+            #     # loop.run_until_complete(asyncio.gather(read_serial()))
+            #     continue
             
     except Exception as e:
         logger.error(e, exc_info=True)
