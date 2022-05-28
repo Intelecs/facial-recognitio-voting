@@ -37,65 +37,71 @@ clients = set()
 async  def index(request):
     return FileResponse(st_abs_file_path + "index.html")
 
-class Notifier:
-    def __init__(self):
-        self.connections: List[WebSocket] = []
-        self.generator = self.get_notification_generator()
+ports = get_serial_ports()
 
-    async def get_notification_generator(self):
-        while True:
-            message = yield
-            await self._notify(message)
-
-    async def push(self, msg: str):
-        await self.generator.asend(msg)
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.connections.append(websocket)
-
-    def remove(self, websocket: WebSocket):
-        self.connections.remove(websocket)
-
-    async def _notify(self, message: str):
-        living_connections = []
-        while len(self.connections) > 0:
-            # Looping like this is necessary in case a disconnection is handled
-            # during await websocket.send_text(message)
-            websocket = self.connections.pop()
-            await websocket.send_text(message)
-            living_connections.append(websocket)
-        self.connections = living_connections
+_port = None
+serial_port = None
+for port, desc, hwid in sorted(ports):
+    logger.info("{}: {} [{}]".format(port, desc, hwid))
+    if "USB-Serial" in desc:
+        _port = port
+        break
 
 
-notifier = Notifier()
 
-#     await notifier.connect(websocket)
-#     try:
-#         while True:
-#             data = await websocket.receive_text()
-#             await websocket.send_text(f"Message text was: {data}")
-#     except WebSocketDisconnect:
-#         notifier.remove(websocket)
+serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
+
 
 @app.websocket_route("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await notifier.connect(websocket)
+    await websocket.accept()
     try:
         await websocket.send_json({"status": "Connected", "sensor": "finger_print"})
     except Exception as e:
         await websocket.send_json({"status": "Disconnected", "sensor": "finger_print"})
     try:
         while True:
-            data = await websocket.receive_text()
-            await websocket.send_text(f"Message text was: {data}")
-            # await notifier.push(f"! Push notification: {data} !")
+
+            async def read_serial():
+                while True:
+                    try:
+                        if serial_port.in_waiting:
+                            data = serial_port.readline().decode().strip()
+                            await websocket.send(data)
+                            logger.info("Received Data from Serial Port: {}".format(data))
+                    except Exception as e:
+                        logger.error(e)
+            
+            try:
+                asyncio.create_task(read_serial())
+                await asyncio.sleep(0.1)
+            except Exception as e:
+                logger.error(f"Error in runnin serial {e}")
+            
+            message = await websocket.receive_text()
+            if message == 'R':
+                try:
+                    logger.info(f"Received message Socket {message}")
+                    serial_port.write(b'R')
+                    serial_port.flush()
+                except Exception as e:
+                    logger.error(f"Error in sending data {e}")
+            else:
+                logger.info(f"Received message from Socket {message}")
+            
+            if message.isnumeric():
+                try:
+                    serial_port.write(bytes(message, 'utf-8'))
+                    serial_port.flush()
+                    logger.info(f"Sendig message {message}")
+                except Exception as e:
+                    logger.error(f"Error in sending data {e}")
+            
 
     except Exception as e:
         logger.error(e, exc_info=True)
-        notifier.remove(websocket)
         # await websocket.close()
 
 
 if __name__ == '__main__':
-    uvicorn.run("app:app", host='0.0.0.0', port=8000, reload=True)
+    uvicorn.run("app:app", host='0.0.0.0', port=5555, reload=True)
