@@ -34,11 +34,9 @@ for port, desc, hwid in sorted(ports):
         _port = port
         break
 
-try:
-    serial_port = serial.Serial(_port, 115200, timeout=1)
-    serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
-except Exception as e:
-    logger.error(e)
+
+serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
+
 
 
 @app.route("/")
