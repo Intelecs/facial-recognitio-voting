@@ -28,7 +28,7 @@ async def socket_client():
 
         while True:
             try:
-                message = await websocket.recv()
+                message = await websocket.recv_nowait()
                 if message == 'R':
                     logger.info(f"Received message Socket {message}")
                     serial_port.write(b'R')
