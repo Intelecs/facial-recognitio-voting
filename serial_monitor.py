@@ -25,18 +25,19 @@ serial_port = serial.Serial(_port, baudrate=9600, timeout=0)
 
 async def socket_client():
     async with websockets.connect('ws://localhost:5555/ws') as websocket:
-        
-        serial_port.write(bytes('R', 'utf-8'))
-        serial_port.flush()
+
         while True:
             try:
-
+                message = await websocket.recv()
+                if message == 'R':
+                    serial_port.write(bytes('R', 'utf-8'))
+                    serial_port.flush()
                 if serial_port.inWaiting() > 0 :
                         data = serial_port.readline()
                         data = data.decode()
                         logger.info("Received Data from Serial Port: {}".format(data))
                         await websocket.send(data)
-                message = await websocket.recv()
+                
                 logger.info(f"Received message Socket {message}")
                 if message.isnumeric():
                         serial_port.write(bytes(message, 'utf-8'))
