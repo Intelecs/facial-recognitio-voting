@@ -96,12 +96,19 @@ async def websocket_endpoint(websocket: WebSocket):
                     except Exception as e:
                         logger.error(e)
                         await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
-                        serial_port.close()
+                        # serial_port.close()
                         continue
             
             if message.isnumeric():
-                serial_port.write(bytes(str(message), "utf-8"))
-                serial_port.flush()
+                try:
+                    await websocket.send_json({"status": "Sent", "sensor": "finger_print"})
+                    serial_port.write(bytes(str(message), "utf-8"))
+                    serial_port.flush()
+                except Exception as e:
+                    logger.error(e)
+                    await websocket.send_json({"status": "Some error occured", "sensor": "finger_print"})
+                    # serial_port.close()
+                    continue
             else:
                 logger.info(message)
                 if message == "train":
