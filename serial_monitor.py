@@ -33,6 +33,7 @@ async def socket_client():
                 if message is not None:
                     if message.isnumeric():
                         serial_port.write(bytes(message, 'utf-8'))
+                        serial_port.flush()
                         logger.info(f"Sendig message {message}")
                 if serial_port.inWaiting() > 0 :
                         data = serial_port.readline()
