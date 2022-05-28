@@ -32,7 +32,7 @@ async def handler(client, path):
             break
 
 clients = []
-start_server = websockets.serve(handler, "localhost", 5555)
+start_server = websockets.serve(handler, "", 5555)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 threading.Thread(target = asyncio.get_event_loop().run_forever).start()
