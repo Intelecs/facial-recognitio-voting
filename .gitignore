@@ -8,4 +8,3 @@ __pycache__
 *.pickle
 !encodings/*.pickle
 venv/
-*.xml
