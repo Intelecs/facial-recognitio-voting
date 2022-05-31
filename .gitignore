@@ -6,5 +6,6 @@ __pycache__
 datasets/
 __pycache__
 *.pickle
+!encoding/
 venv/
 *.xml
