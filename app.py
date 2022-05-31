@@ -100,6 +100,10 @@ async def websocket_endpoint(websocket: WebSocket):
                     logger.error(f"Error in sending data {e}", exc_info=True)
             else:
                 logger.info(f"Received message from Socket {message}", exc_info=True)
+                
+                if message == 'train':
+                    logger.info(f"Start Training new dataset")
+                    subprocess.Popen(["python", "training.py"])
             
             if message.isnumeric():
                 try:
