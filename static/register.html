@@ -85,7 +85,7 @@
   </div>
 
   <script>
-    var socket = new WebSocket('ws:192.168.43.159:5555/ws');
+    var socket = new WebSocket('ws:localhost:5555/ws');
     var server_status = document.getElementById('serverStatus');
     var finger_status = document.getElementById('finger-print-status');
     var sendId = document.getElementById('sendId');
@@ -99,74 +99,24 @@
       var res = data.command;
       res = res.replace(/\s/g, '');
       var message = ``;
-      if (res === "i") {
-        $('#placeFinger').html("wait...");
-      }
-      if (res === "N") {
-        $('#placeFinger').html("No Sensor Connected");
-        return;
-      }
-      if (res === "w") {
-        $('#placeFinger').html("Place your finger..");
-        setTimeout(() => {
-          socket.send('R');
-        }, 8000);
-      }
-      if (res === "p") {
-        $('#placeFinger').html("Place same finger again..!");
-        setTimeout(() => {
-          socket.send('R');
-        }, 8000);
-
-      }
-
-      if (res === "m") {
-        $('#placeFinger').html("MATCHED");
-        setTimeout(() => {
-          socket.send('R');
-        }, 8000);
-      }
-      if (res === "n") {
-        $('#placeFinger').html("NOT MATCH");
-      }
-      if (res === "s") {
-        $('#placeFinger').html("Saved");
-
-      }
+      $('#placeFinger').html(message);
+     
     }
 
     sendId.addEventListener('click', function () {
-      if (finger_Id.value == '') {
-        alert('Enter finger ID');
-        return;
-      }
-      $('#sendId').prop('disabled', true);
-      socket.send("E");
+        $('#sendId').prop('disabled', true);
+      socket.send("e");
       $('#placeFinger').html("wait..");
-      setTimeout(() => {
-        socket.send('R');
-      }, 8000);
-
-      setTimeout(() => {
-        socket.send(finger_Id.value);
-      }, 5000);
-      setTimeout(() => {
-        socket.send('R');
-      }, 5000);
-    });
+      });
 
 
 
     $('#submit-btn').click(function (e) {
-
       e.preventDefault();
       var name = $("#name").val();
-
       var genders = document.getElementsByName('gender');
       var phone = $("#phone").val();
-
       var voteId = $("#voteId").val();
-
       var gender = '';
       var fingerId = $("#input_Id").val();
       var faceId = "";
